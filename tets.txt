@@ -1,0 +1,1 @@
+g++ test.cpp lockTable.cpp PrimaryKey.cpp parser.cpp List.cpp Array.cpp -o test
