@@ -1,1 +1,4 @@
-TABLE_1,T1_column_1,T1_column_2,T1_column_3,T1_column_4
+table1_pk,сolumn1,сolumn2,сolumn3,сolumn4
+1,John,Doe,30,NewYork
+2,Jane,Smith,25,LosAngeles
+3,Bob,Johnson,40,Chicago

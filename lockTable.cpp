@@ -1,64 +1,60 @@
 #include "lockTable.h"
-#include <fstream>
-#include <filesystem>
 
 namespace fs = std::filesystem;
 
-string lockTable::lockFilePath(const string& tableName) {
+string LockTable::pathLockFile(const string& tableName) {
     return "scheme/" + tableName + "/" + tableName + "_lock.txt";
 }
 
-// блокировка таблицы
-bool lockTable::lockTablee(const string& tableName) {
-    string lockFile = lockFilePath(tableName);
-    ifstream lockFileStream(lockFile);
-    int lockStatus = 0;
-    lockFileStream >> lockStatus;
-    lockFileStream.close();
+bool LockTable::lockTable(const string& tableName) {
+    string lockFile = pathLockFile(tableName);
+    ifstream lockFileStream(lockFile); // открываем файл для чтения
+    int lockStatus = 0; // переменная для хранения текущего статуса блокировки
+    lockFileStream >> lockStatus; // считываем текущий статус блокировки из файла
+    lockFileStream.close(); // закрываем файл после чтения
 
     if (lockStatus == 1) {
         return false; // таблица уже заблокирована
     }
 
-    ofstream lockFileOutStream(lockFile);
+    ofstream lockFileOutStream(lockFile); // открываем файл для записи
     if (lockFileOutStream.is_open()) {
-        lockFileOutStream << "1";
-        lockFileOutStream.close();
-        return true;
+        lockFileOutStream << "1"; // записываем статус блокировки "1" (заблокировано)
+        lockFileOutStream.close(); // закрываем файл после записи
+        return true; // успешно заблокировали таблицу
     }
 
     return false; // не удалось создать файл блокировки
 }
 
-// разблокировка таблицы
-bool lockTable::unlockTable(const string& tableName) {
-    string lockFile = lockFilePath(tableName);
+bool LockTable::unlockTable(const string& tableName) {
+    string lockFile = pathLockFile(tableName);
     ifstream lockFileStream(lockFile);
     int lockStatus = 0;
     lockFileStream >> lockStatus;
     lockFileStream.close();
 
     if (lockStatus == 0) {
-        return false; // таблица уже разблокирована
+        return false;  // таблица уже разблокирована
     }
 
     ofstream lockFileOutStream(lockFile);
     if (lockFileOutStream.is_open()) {
-        lockFileOutStream << "0";
+        lockFileOutStream << "0";  // записываем статус блокировки "0" (разблокировано)
         lockFileOutStream.close();
-        return true;
+        return true;  // успешно разблокировали таблицу
     }
 
-    return false; // не удалось изменить файл блокировки
+    return false;  // не удалось изменить файл блокировки
 }
 
-// проверка, заблокирована ли таблица
-bool lockTable::isTableLocked(const string& tableName) {
-    string lockFile = lockFilePath(tableName);
+// заблокирована ли таблица?
+bool LockTable::isTableLocked(const string& tableName) {
+    string lockFile = pathLockFile(tableName);
     ifstream lockFileStream(lockFile);
-    int lockStatus = 0;
-    lockFileStream >> lockStatus;
+    int lockStatus = 0; 
+    lockFileStream >> lockStatus;  // считываем текущий статус блокировки из файла
     lockFileStream.close();
 
-    return lockStatus == 1;
+    return lockStatus == 1;  // возвращаем true, если таблица заблокирована, иначе false
 }

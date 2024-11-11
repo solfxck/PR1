@@ -1,1 +1,8 @@
-g++ test.cpp lockTable.cpp PrimaryKey.cpp parser.cpp List.cpp Array.cpp -o test
+g++ main.cpp lockTable.cpp PrimaryKey.cpp Database.cpp parser.cpp support/Array.cpp support/List.cpp -o test
+
+INSERT INTO table1 VALUES ('John', 'Doe', '30', 'New York')
+INSERT INTO table1 VALUES ('Jane', 'Smith', '25', 'Los Angeles')
+INSERT INTO table1 VALUES ('Bob', 'Johnson', '40', 'Chicago')
+INSERT INTO table2 VALUES ('John', 'Engineer')
+INSERT INTO table2 VALUES ('Jane', 'Designer')
+INSERT INTO table2 VALUES ('Alice', 'Manager')

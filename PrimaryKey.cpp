@@ -1,39 +1,21 @@
-#include "PrimaryKey.h"
-#include <fstream>
-#include <filesystem>
-#include <iostream>
+#include "primaryKey.h"
 
-namespace fs = std::filesystem;
-using namespace std;
-
-string PrimaryKey::pkSequenceFilePath(const string& tableName) {
+// путь к файлу с ключем
+string PrimaryKey::pathFile(const string& tableName) {
     return "scheme/" + tableName + "/" + tableName + "_pk_sequence.txt";
 }
 
-// получение следующего первичного ключа для таблицы
-int PrimaryKey::getNextPrimaryKey(const string& tableName) {
-    string pkSequenceFile = pkSequenceFilePath(tableName);
-    int currentKey = 0;
+// возвращает следующий первичный ключ для заданной таблицы
+int PrimaryKey::nextPrimaryKey(const string& tableName) {
+    string pkFilePath = pathFile(tableName);
+    ifstream pkFile(pkFilePath);  // открываем файл для чтения
+    int currentPk;  // для текуще. ключ
+    pkFile >> currentPk;  // считываем текущий ключ из файла
+    pkFile.close();  // закрываем файл
 
-    // проверка существования файла последовательности
-    if (fs::exists(pkSequenceFile)) {
-        ifstream inFile(pkSequenceFile);
-        inFile >> currentKey;
-        inFile.close();
-    }
+    ofstream pkFileOut(pkFilePath);  // открываем файл для записи
+    pkFileOut << (currentPk + 1) << endl;  // записываем след. ключ (текущий + 1)
+    pkFileOut.close();
 
-    // увеличение ключа
-    currentKey++;
-
-    // запись нового значения ключа в файл
-    ofstream outFile(pkSequenceFile);
-    if (outFile.is_open()) {
-        outFile << currentKey;
-        outFile.close();
-    } else {
-        // Обработка ошибки открытия файла
-        cout << "Не удалось открыть файл последовательности первичных ключей для записи." << endl;
-    }
-
-    return currentKey;
+    return currentPk;  // ключ (который был считан из файла)
 }

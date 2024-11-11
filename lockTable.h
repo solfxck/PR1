@@ -1,13 +1,15 @@
-#include <string>
 #pragma once
+#include <string>
+#include <fstream>
+#include <filesystem>
 
 using namespace std;
 
-class lockTable {
+class LockTable {
 public:
-    static bool lockTablee(const string& tableName); // блокировка таблицы
-    static bool unlockTable(const string& tableName); // разблокировка таблицы
+    static bool lockTable(const string& tableName);
+    static bool unlockTable(const string& tableName);
     static bool isTableLocked(const string& tableName); // проверка, заблокирована ли таблица
 private:
-    static string lockFilePath(const string& tableName); // получение имени файла блокировки
+    static string pathLockFile(const string& tableName); // получение имени файла блокировки
 };

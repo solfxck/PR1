@@ -1,84 +1,36 @@
 #include "parser.h"
-#include <sstream>
 
-// вспомогательная функция для разделения строки на токены
-Array Parser::tokenize(const string& query) {
-    Array tokens;
-    string token;
-    istringstream tokenStream(query);
-    while (tokenStream >> token) {
-        tokens.pushEnd(token);
-    }
-    return tokens;
-}
+using namespace std;
 
-// парсинг SQL-запроса
-Query Parser::parseQuery(const string& query) {
-    Array tokens = tokenize(query);
-    if (tokens.length() == 0) {
-        cout << "Пустой запрос" << endl;
-    }
+List parseInsert(const string& query) {
+    List result;  // для хранения результата
+    stringstream ss(query);  // поток для обработки строки запроса
+    string token;  // переменная для хранения текущего токена
 
-    string command = tokens.get(0);
-    if (command == "SELECT") {
-        return parseSelect(tokens);
-    } 
-    
-    /*
-    else if (command == "INSERT") {
-        return parseInsert(tokens);
-    } 
-    
-    else if (command == "DELETE") {
-        return parseDelete(tokens);
-    } 
-    */
+    // пропускаем
+    ss >> token; // INSERT
+    ss >> token; // INTO
 
-    else {
-        cout << "Ошибка" << endl;
-    }
-}
+    // получаем имя таблицы
+    ss >> token;
+    result.pushHead(token);  // добавляем имя таблицы в начало списка
 
-Query Parser::parseSelect(const Array& tokens) {
-    Query query;
-    query.type = "SELECT";
+    // пропускаем
+    ss >> token; // VALUES
 
-    // Парсинг колонок
-    int fromIndex = -1;
-    for (int i = 1; i < tokens.length(); ++i) {
-        if (tokens.get(i) == "FROM") {
-            fromIndex = i;
-            break;
-        }
-        query.columns.pushTail(tokens.get(i));
+    // получаем значения
+    getline(ss, token);  // считываем оставшуюся часть строки
+    stringstream valuesStream(token);  // создаем поток для обработки значений
+    while (getline(valuesStream, token, ',')) {  // разбиваем строку по запятым
+        // убираем лишние пробелы и кавычки
+        token.erase(remove_if(token.begin(), token.end(), [](char c) { return c == ' ' || c == '(' || c == ')' || c == '\''; }), token.end());
+        result.pushTail(token);
     }
 
-    if (fromIndex == -1) {
-        cout << "Ошибка синтаксиса: не найдено ключевое слово FROM" << endl;
-    }
-
-    // парсинг таблиц
-    int whereIndex = -1;
-    for (int i = fromIndex + 1; i < tokens.length(); ++i) {
-        if (tokens.get(i) == "WHERE") {
-            whereIndex = i;
-            break;
-        }
-        query.table = tokens.get(i);
-    }
-
-    // парсинг условия (если есть)
-    if (whereIndex != -1) {
-        query.condition = tokens.get(whereIndex + 1);
-    }
-
-    return query;
+    return result;
 }
 
 /*
-Query Parser::parseInsert(const Array& tokens) {
-}
-
-Query Parser::parseDelete(const Array& tokens) {
-}
+parseInsert()
+parseDelete()
 */
