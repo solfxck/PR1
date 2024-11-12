@@ -2,7 +2,7 @@
 
 // путь к файлу с ключем
 string PrimaryKey::pathFile(const string& tableName) {
-    return "scheme/" + tableName + "/" + tableName + "_pk_sequence.txt";
+    return "Scheme/" + tableName + "/" + tableName + "_pk_sequence.txt";
 }
 
 // возвращает следующий первичный ключ для заданной таблицы

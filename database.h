@@ -6,7 +6,7 @@
 #include <sstream>
 #include "support/header.h"
 #include "support/json.hpp"
-#include "PrimaryKey.h"
+#include "primaryKey.h"
 #include "lockTable.h"
 #include "parser.h"
 

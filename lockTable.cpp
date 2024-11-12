@@ -3,7 +3,7 @@
 namespace fs = std::filesystem;
 
 string LockTable::pathLockFile(const string& tableName) {
-    return "scheme/" + tableName + "/" + tableName + "_lock.txt";
+    return "Scheme/" + tableName + "/" + tableName + "_lock.txt";
 }
 
 bool LockTable::lockTable(const string& tableName) {
