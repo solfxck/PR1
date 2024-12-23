@@ -6,3 +6,20 @@ INSERT INTO table1 VALUES ('Bob', 'Johnson', '40', 'Chicago')
 INSERT INTO table2 VALUES ('John', 'Engineer')
 INSERT INTO table2 VALUES ('Jane', 'Designer')
 INSERT INTO table2 VALUES ('Alice', 'Manager')
+
+SELECT table1.column1, table1.column2, table1.column3, table1.column4 FROM table1
+SELECT table2.column1, table2.column2 FROM table2
+
+SELECT table1.column1, table1.column2, table1.column3, table1.column4 FROM table1 WHERE table1.column1 = 'John'
+Вывод: 
+table1.column1  table1.column2  table1.column3  table1.column4
+John    Doe     30      NewYork
+
+SELECT table1.column1, table1.column2 FROM table1 WHERE table1.column1 = 'John'
+SELECT table1.column1, table1.column2 FROM table1 WHERE table1.column1 = 'John' AND table1.column2 = 'Doe'
+
+SELECT table1.column1, table1.column2 FROM table1 WHERE table1.column1 = 'John' AND table1.column2 = 'Smith'
+SELECT table1.column1, table1.column2 FROM table1 WHERE table1.column1 = 'John' OR table1.column1 = 'Jane'
+SELECT table1.column1, table1.column2 FROM table1 WHERE table1.column1 = 'John' AND table1.column2 = 'Doe' OR table1.column1 = 'Jane'
+
+файлы проекта: database.cpp, lockTable.cpp, PrimaryKey.cpp, parser.cpp, support/Array.cpp, support/List.cpp, support/HashTable.cpp

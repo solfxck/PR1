@@ -136,6 +136,73 @@ bool List::search(string value) {
     return false;  // элемент не найден
 }
 
+// Сериализация списка в строку
+// Сложность: O(n)
+string List::toString() {
+    if (head == nullptr) return "";
+
+    string result;
+    Node1* current = head;
+    while (current != nullptr) {
+        // Экранируем разделитель, если он встречается в данных
+        string escapedData = current->data;
+        size_t pos = 0;
+        while ((pos = escapedData.find("|", pos)) != string::npos) {
+            escapedData.replace(pos, 1, "\\|");
+            pos += 2;
+        }
+
+        result += escapedData;
+        if (current->next != nullptr) {
+            result += "|";  // используем | как разделитель
+        }
+        current = current->next;
+    }
+    return result;
+}
+
+// Десериализация строки в список
+// Сложность: O(n)
+List List::fromString(const string& str) {
+    List result;
+    if (str.empty()) return result;
+
+    size_t start = 0;
+    size_t end = 0;
+
+    while ((end = str.find("|", start)) != string::npos) {
+        string token = str.substr(start, end - start);
+        
+        // Удаляем экранирование
+        size_t pos = 0;
+        while ((pos = token.find("\\|", pos)) != string::npos) {
+            token.replace(pos, 2, "|");
+            pos++;
+        }
+
+        result.pushTail(token);
+        start = end + 1;
+    }
+
+    // Добавляем последний элемент
+    string lastToken = str.substr(start);
+    // Удаляем экранирование для последнего элемента
+    size_t pos = 0;
+    while ((pos = lastToken.find("\\|", pos)) != string::npos) {
+        lastToken.replace(pos, 2, "|");
+        pos++;
+    }
+    result.pushTail(lastToken);
+
+    return result;
+}
+
+// Получение длины списка
+// Сложность: O(1)
+int List::length() {
+    return size;
+}
+
 // Сложность: O(n)
 void List::display() {
     if (head == nullptr) {

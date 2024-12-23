@@ -41,5 +41,35 @@ struct List {
     void popTail();
     bool popValue(string value);
     bool search(string value);
+    string toString(); // Сериализация списка в строку
+    static List fromString(const string& str); // Десериализация строки в список
+    int length(); // Получение длины списка
+    void display();
+};
+
+// Структура узла для HashTable, хранящего List
+struct NodeHT_List {
+    std::string key;
+    List value;
+    NodeHT_List* next;
+
+    // Конструктор с инициализацией
+    NodeHT_List(const std::string& k, const List& val) : 
+        key(k), value(val), next(nullptr) {}
+};
+
+// Структура HashTableList для работы с List
+struct HashTableList {
+    NodeHT_List** table;
+    int size;
+    int count;
+
+    HashTableList(int initialSize = 100);
+    ~HashTableList();
+    int hash_function(const string& str);
+    void insert(const string& key, const List& value);
+    List get(const string& key);
+    bool contains(const string& key);
+    void remove(const string& key);
     void display();
 };

@@ -26,12 +26,17 @@ int main() {
             break;
         }
 
-        if (command.substr(0, 11) == "INSERT INTO") {
+        else if (command.substr(0, 11) == "INSERT INTO") {
             List values = parseInsert(command);
             string tableName = values.head->data;
             values.popHead(); // удаляем имя таблицы из списка значений
             Database::insertTable(tableName, values);
-        } else {
+        }
+        else if (command.substr(0, 6) == "SELECT") {
+            SelectQuery selectQuery = parseSelect(command);
+            Database::selectTable(selectQuery);
+        } 
+        else {
             cout << "Неизвестная команда!" << endl;
         }
     }

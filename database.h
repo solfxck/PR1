@@ -18,7 +18,7 @@ public:
     static void createDirectoryStructure(const json& config); // создание структуры директорий и файлов
     static void insertTable(const string& tableName, const List& values); // INSERT INTO
     static int getTuplesLimit() { return tuplesLimit; } // метод для доступа к tuplesLimit
-    // static void selectFromTables(); // SELECT <> FROM <> (+WHERE и операторы OR , AND ???)
+    static void selectTable(const SelectQuery& query); // // SELECT <> FROM <> (+WHERE и операторы OR , AND ???)
     // static void deleteTables() // DELETE FROM
 private:
     static string schemaName; // имя схемы
